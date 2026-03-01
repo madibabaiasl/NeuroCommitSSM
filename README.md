@@ -1,34 +1,37 @@
-# NeuroCommitSSM (IROS) — Notebooks & Pipeline
+# NeuroCommitSSM  (Notebooks & Pipeline)
 
-This repository contains the end-to-end notebook pipeline for our IROS paper, including **data preprocessing (Phase 1B → Phase 5.5)** and the **model notebook** for training/evaluation.
+This repository contains the end-to-end notebook pipeline for our IROS paper, including data preprocessing (Phase 1B → Phase 5.5) and the model notebook for training/evaluation.
 
 ---
+
 
 ## Repository layout
 
-├── Artifacts/
-│   ├── final_cfg.json
-│   ├── final_model.pt
-│   ├── final_thresholds.json
-│   └── stats_fold.json
-│
-├── Data preprocessing/
-│   ├── Phase-1B.ipynb
-│   ├── Phase-1C.ipynb
-│   ├── Phase-2A.ipynb
-│   ├── Phase-2B.ipynb
-│   ├── Phase-3.ipynb
-│   ├── Phase-4A.ipynb
-│   ├── Phase-4B.ipynb
-│   ├── Phase-5A.ipynb
-│   └── Phase-5B.ipynb  # includes/ends with Phase 5.5 feature extraction
-│
-└── Model Notebook/
-    └── Model.ipynb
+```text
+Artifacts/
+  final_cfg.json
+  final_model.pt
+  final_thresholds.json
+  stats_fold.json
+
+Data preprocessing/
+  Phase-1B.ipynb
+  Phase-1C.ipynb
+  Phase-2A.ipynb
+  Phase-2B.ipynb
+  Phase-3.ipynb
+  Phase-4A.ipynb
+  Phase-4B.ipynb
+  Phase-5A.ipynb
+  Phase-5B.ipynb   # includes/ends with Phase 5.5 feature extraction
+
+Model Notebook/
+  Model.ipynb 
+
+```
 
 ---
 
-## What’s inside?
 
 ### 1) Data preprocessing (run in order: Phase 1B → Phase 5.5)
 
@@ -44,17 +47,15 @@ Inside **Data preprocessing/**, run notebooks **sequentially**:
 8. **Phase-5A.ipynb** — Fold-wise export (balanced supervised + SSL/unbalanced)
 9. **Phase-5B.ipynb** — **Phase 5.5 feature extraction** (features used by the model)
 
-✅ After Phase **5.5**, you should have model-ready exports (shards/features) for training/evaluation.
 
 ---
 
 ### 2) Model Notebook
 
 Go to **Model Notebook/Model.ipynb** and run it to:
-- load exported shards/features from Phase 5/5.5
 - train and/or fine-tune the model
 - evaluate under sensor-dropout scenarios (as configured in the notebook)
-- save metrics/artifacts and (optionally) overwrite/update files in **Artifacts/**
+- save metrics/artifacts /update files in **Artifacts/**
 
 ---
 
@@ -77,9 +78,10 @@ See **Model Notebook/Model.ipynb** for the exact loading/evaluation code.
 
 ---
 
-## Data layout (expected)
+## Dataset
 
 The dataset will be available publicly once the paper is accepted.
+
 ---
 
 ## Environment
@@ -97,11 +99,13 @@ Common dependencies:
 
 ## Citation
 
-We will update it later
+ 
+**We will replace the placeholders after acceptance.**
 
-@inproceedings{TODO_IROS_NeuroCommitSSM_2026,
-  title     = {TODO: Paper Title},
-  author    = {TODO: Authors},
+```bibtex
+@inproceedings{NeuroCommitSSM_IROS_2026,
+  title     = {NeuroCommitSSM: TODO (paper title after acceptance)},
+  author    = {TODO: Author list},
   booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
   year      = {2026}
 }
@@ -109,5 +113,3 @@ We will update it later
 ---
 
 
-- GitHub: **Tipusultan199**
-- Please use GitHub Issues for bugs/questions.
