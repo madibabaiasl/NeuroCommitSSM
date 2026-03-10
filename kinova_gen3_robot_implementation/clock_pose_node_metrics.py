@@ -49,7 +49,7 @@ from tf2_geometry_msgs import do_transform_pose_stamped
 # ============================
 # Roboflow config
 # ============================
-ROBOFLOW_API_KEY_DEFAULT = "b9dqf9zSgloKnDbz67tH"
+ROBOFLOW_API_KEY_DEFAULT = "" # Insert your Roboflow API key here
 ROBOFLOW_PROJECT_DEFAULT = "clock-geqo0"
 ROBOFLOW_VERSION_DEFAULT = "1"
 ROBOFLOW_CONFIDENCE_DEFAULT = 0.40
