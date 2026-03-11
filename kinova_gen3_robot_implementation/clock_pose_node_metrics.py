@@ -401,7 +401,7 @@ class ClockPoseNodeMetrics(Node):
         except Exception:
             return None
 
-    # ── Marker ──
+    # ── Clock Marker ──
     def _publish_clock_marker(self, stamp_msg, xyz, yaw):
         mk = Marker()
         mk.header.frame_id = self.base_frame
