@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="NeuroCommitSSM: Decision-Centric Shared Autonomy for Safe Assistive Manipulation via EEG–EMG–ET Commit Readiness" />
+  <meta name="keywords" content="Assistive Robotics, Shared Autonomy, EEG, EMG, Eye Tracking, Commit Readiness, Kinova Gen3, HAC, IROS" />
+  <title>NeuroCommitSSM — IROS 2026</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Noto+Sans:400,600,700|Castoro:400,700" rel="stylesheet">
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+  <style>
+    :root{
+      --accent:#0ea5a5;
+      --accentDark:#0b7285;
+      --soft:#f6f9fb;
+      --soft2:#f2f7fa;
+      --ink:#0f172a;
+      --muted:#556070;
+      --cardBorder: rgba(15,23,42,.08);
+      --shadow: 0 12px 38px rgba(15,23,42,.08);
+      --shadow2: 0 10px 26px rgba(15,23,42,.10);
+      --radius: 18px;
+    }
+
+    html { scroll-behavior:smooth; }
+    body{
+      font-family:"Noto Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:#fff;
+      line-height:1.6;
+    }
+    .title,.subtitle{ font-family:"Google Sans","Noto Sans",sans-serif; }
+    a{ color:var(--accentDark); text-decoration:none; }
+    a:hover{ color:var(--accent); }
+
+    /* Wider professional layout */
+    .container.is-max-fullhd { max-width: 1400px; }
+    @media (min-width: 1600px){ .container.is-max-fullhd { max-width: 1520px; } }
+
+    /* Sections */
+    .section{ padding:3.25rem 0; }
+    .section.is-alt{ background: linear-gradient(180deg, var(--soft2), #ffffff); }
+    .muted{ color:var(--muted); }
+    .small{ font-size:.97rem; }
+
+    /* Navbar */
+    .hero-spacer { height:60px; } /* offset fixed navbar */
+    .navbar.is-fixed-top{
+      border-bottom:1px solid rgba(15,23,42,.08);
+      background:rgba(255,255,255,.88);
+      backdrop-filter:saturate(1.8) blur(12px);
+    }
+    .navbar-item{
+      font-weight:600;
+      color:#0f172a;
+    }
+    .navbar-item:hover{
+      color:var(--accentDark) !important;
+      background:transparent !important;
+    }
+
+    /* Hero */
+    .hero.is-light{
+      background:linear-gradient(180deg,#ffffff 0%, var(--soft) 100%);
+    }
+
+    /* Pills */
+    .pill{
+      display:inline-flex; align-items:center; gap:.45rem;
+      padding:.35rem .70rem;
+      border-radius:999px;
+      background:rgba(14,165,165,.10);
+      border:1px solid rgba(14,165,165,.25);
+      color:var(--accentDark);
+      font-weight:700;
+      font-size:.9rem;
+      margin:.2rem .25rem 0 0;
+      white-space:nowrap;
+    }
+
+    /* Buttons */
+    .button.is-rounded{ border-radius:999px; }
+    .btn-accent{
+      background:var(--accent) !important;
+      border-color:var(--accent) !important;
+      color:#fff !important;
+      box-shadow: 0 10px 20px rgba(14,165,165,.18);
+    }
+    .btn-accent:hover{
+      background:#0c8c8c !important;
+      border-color:#0c8c8c !important;
+      transform: translateY(-1px);
+    }
+    .btn-soft{
+      background:rgba(14,165,165,.10);
+      border-color:rgba(14,165,165,.25);
+      color:var(--accentDark);
+    }
+    .buttons .button{ transition: transform .12s ease, box-shadow .2s ease; }
+    .buttons .button:hover{ box-shadow: 0 10px 22px rgba(15,23,42,.08); }
+
+    /* Cards */
+    .card{
+      border-radius:var(--radius);
+      border:1px solid var(--cardBorder);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition: transform .14s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow:var(--shadow2);
+      border-color: rgba(14,165,165,.22);
+    }
+    .rounded{ border-radius:var(--radius); }
+
+    /* Figures */
+    .figure-frame{
+      background:#fff;
+      border:1px solid var(--cardBorder);
+      padding:.85rem;
+      border-radius:var(--radius);
+    }
+
+    /* Dividers */
+    .divider{ height:1px; background:rgba(15,23,42,.10); margin:1.35rem 0; }
+
+    /* Section title row */
+    .section-title{
+      display:flex; align-items:center; justify-content:center; gap:.65rem;
+      margin-bottom:1.25rem;
+    }
+    .section-title i{
+      color:var(--accentDark);
+      background:rgba(14,165,165,.10);
+      border:1px solid rgba(14,165,165,.20);
+      width:38px; height:38px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:12px;
+    }
+
+    /* KPI tiles */
+    .kpi-card{
+      border:1px solid rgba(15,23,42,.08);
+      border-radius:16px;
+      padding:1rem;
+      background:#fff;
+      height:100%;
+    }
+    .kpi-top{
+      display:flex; align-items:center; justify-content:center;
+      gap:.55rem;
+      color:var(--accentDark);
+      font-weight:800;
+      margin-bottom:.35rem;
+    }
+    .kpi-top i{ opacity:.95; }
+    .kpi-value{
+      font-size:1.55rem;
+      font-weight:900;
+      letter-spacing:-0.02em;
+      text-align:center;
+    }
+    .kpi-label{
+      font-size:.95rem;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    /* Video presentation */
+    .video-wrap{
+      width:100%;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(15,23,42,.10);
+      background:#000;
+    }
+    video{
+      width:100%;
+      height:auto;
+      display:block;
+      aspect-ratio: 16 / 9;
+      background:#000;
+    }
+
+    /* BibTeX / code */
+    pre{
+      border-radius:16px;
+      border:1px solid rgba(15,23,42,.12);
+      background:#0b1220;
+      padding:1rem 1.05rem;
+      overflow:auto;
+    }
+    pre code{
+      color:#e5e7eb;
+      white-space:pre;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:.92rem;
+    }
+
+    /* Footer */
+    .footer{
+      background:var(--soft);
+      border-top:1px solid rgba(15,23,42,.08);
+    }
+
+    /* Back-to-top */
+    .to-top{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:50;
+      border-radius:999px;
+      padding:.7rem .85rem;
+      border:1px solid rgba(14,165,165,.25);
+      background:rgba(255,255,255,.92);
+      backdrop-filter:saturate(1.6) blur(10px);
+      box-shadow: 0 12px 30px rgba(15,23,42,.12);
+      color:var(--accentDark);
+      display:none;
+      transition: transform .15s ease;
+    }
+    .to-top:hover{ transform: translateY(-2px); }
+
+    /* Anchor offset for fixed navbar */
+    .anchor { scroll-margin-top: 85px; }
+  </style>
+</head>
+
+<body>
+
+<!-- ====================== NAVBAR ====================== -->
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="container is-max-fullhd">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#top"><strong>NeuroCommitSSM</strong></a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navMenu" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#overview">Overview</a>
+        <a class="navbar-item" href="#abstract">Abstract</a>
+        <a class="navbar-item" href="#method">Method</a>
+        <a class="navbar-item" href="#pipeline">Pipeline</a>
+        <a class="navbar-item" href="#video">Video</a>
+        <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item" href="#dataset">Dataset</a>
+        <a class="navbar-item" href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="top" class="hero-spacer"></div>
+
+<!-- ====================== HERO ====================== -->
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container is-max-fullhd">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <div class="mb-3">
+            <span class="pill"><i class="fa-solid fa-robot"></i> IROS 2026</span>
+            <span class="pill"><i class="fa-solid fa-shield-halved"></i> Commit-to-Execute</span>
+            <span class="pill"><i class="fa-solid fa-wave-square"></i> EEG–EMG–ET</span>
+          </div>
+
+          <h1 class="title is-2">
+            NeuroCommitSSM: Decision-Centric Shared Autonomy for Safe Assistive Manipulation via EEG–EMG–ET Commit Readiness
+          </h1>
+
+          <p class="subtitle is-5 muted" style="max-width: 1100px; margin: 0 auto;">
+            NeuroCommitSSM predicts continuous <em>commit readiness</em> from synchronized EEG, EMG, and eye tracking, then converts it into stable
+            commit events via dwell/hysteresis filtering and gates execution with feasibility-grounded HOLD–ASSIST–COMMIT (HAC) shared autonomy.
+          </p>
+
+          <div class="is-size-5 mt-4">
+            <span class="author-block">Tipu Sultan<sup>1</sup>,</span>
+            <span class="author-block">Param Sangani<sup>2</sup>,</span>
+            <span class="author-block">Kody Cool<sup>1</sup>,</span>
+            <span class="author-block">Pascal Sikorski<sup>2</sup>,</span>
+            <span class="author-block">Guangping Liu<sup>1</sup>,</span>
+            <span class="author-block">Hadi Akbarpour<sup>2</sup>,</span>
+            <span class="author-block">Madi Babaiasl<sup>1</sup></span>
+          </div>
+
+          <div class="is-size-6 muted mt-2">
+            <span><sup>1</sup>Saint Louis University — Aerospace &amp; Mechanical Engineering</span>
+            <span class="mx-2">·</span>
+            <span><sup>2</sup>Saint Louis University — Computer Science</span>
+          </div>
+
+          <div class="buttons is-centered mt-5">
+            <a class="button is-rounded is-dark"
+               href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main"
+               target="_blank" rel="noopener">
+              <span class="icon"><i class="fa-solid fa-file-pdf"></i></span>
+              <span>Paper (Repo)</span>
+            </a>
+
+            <a class="button is-rounded btn-accent"
+               href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main"
+               target="_blank" rel="noopener">
+              <span class="icon"><i class="fa-brands fa-github"></i></span>
+              <span>Code</span>
+            </a>
+
+            <a class="button is-rounded btn-soft"
+               href="#video">
+              <span class="icon"><i class="fa-solid fa-video"></i></span>
+              <span>Videos</span>
+            </a>
+
+            <a class="button is-rounded"
+               href="https://youtu.be/SN-F9XIe3hM"
+               target="_blank" rel="noopener">
+              <span class="icon"><i class="fa-brands fa-youtube"></i></span>
+              <span>Paper Video</span>
+            </a>
+
+            <a class="button is-rounded" href="#bibtex">
+              <span class="icon"><i class="fa-solid fa-quote-right"></i></span>
+              <span>BibTeX</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+<!-- ====================== OVERVIEW ====================== -->
+<section class="section anchor is-alt" id="overview">
+  <div class="container is-max-fullhd">
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+            <div class="section-title">
+              <i class="fa-solid fa-diagram-project"></i>
+              <h2 class="title is-4 mb-0">Overview</h2>
+            </div>
+
+            <figure class="figure-frame">
+              <img class="rounded"
+                   src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Figures/modeltoexperiment.png"
+                   alt="NeuroCommitSSM overview figure"
+                   style="width:100%; height:auto;">
+            </figure>
+
+            <div class="divider"></div>
+
+            <div class="columns is-multiline is-variable is-4">
+              <div class="column is-12-mobile is-6-tablet is-3-desktop">
+                <div class="kpi-card">
+                  <div class="kpi-top"><i class="fa-solid fa-bullseye"></i><span>Recognition</span></div>
+                  <div class="kpi-value">0.950</div>
+                  <div class="kpi-label">Action Bal-Acc (S0)</div>
+                </div>
+              </div>
+
+              <div class="column is-12-mobile is-6-tablet is-3-desktop">
+                <div class="kpi-card">
+                  <div class="kpi-top"><i class="fa-solid fa-shield-halved"></i><span>Safety</span></div>
+                  <div class="kpi-value">0.75</div>
+                  <div class="kpi-label">FP / 1k REST (S0)</div>
+                </div>
+              </div>
+
+              <div class="column is-12-mobile is-6-tablet is-3-desktop">
+                <div class="kpi-card">
+                  <div class="kpi-top"><i class="fa-solid fa-bolt"></i><span>Runtime</span></div>
+                  <div class="kpi-value">7.89 ms</div>
+                  <div class="kpi-label">Latency / window (A100)</div>
+                </div>
+              </div>
+
+              <div class="column is-12-mobile is-6-tablet is-3-desktop">
+                <div class="kpi-card">
+                  <div class="kpi-top"><i class="fa-solid fa-robot"></i><span>System</span></div>
+                  <div class="kpi-value">96.9%</div>
+                  <div class="kpi-label">HIL success (Full HAC)</div>
+                </div>
+              </div>
+            </div>
+
+            <p class="muted small mt-4" style="margin-bottom:0;">
+              Metrics are reported in the paper under LOSO cross-validation and sensor-dropout scenarios (S0–S6). System-level validation uses
+              Kinova Gen3 hardware-in-the-loop (HIL) evaluation of supervisor variants.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== ABSTRACT ====================== -->
+<section class="section anchor" id="abstract">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-align-left"></i>
+      <h2 class="title is-3 mb-0">Abstract</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+            <div class="content has-text-justified" style="max-width: 1200px; margin: 0 auto;">
+              <p>
+                Safe commit-to-execute decisions are critical for assistive robotic manipulators: the system must minimize false activations during rest
+                while remaining responsive to user intent. Existing intent-recognition pipelines conflate window-level classification with commit readiness,
+                yielding high false-positive rates and instability under cross-subject variability and sensor dropout. We present
+                <strong>NeuroCommitSSM</strong>, a decision-centric framework that learns continuous commit-readiness from synchronized
+                electroencephalography (EEG), electromyography (EMG), and eye tracking (ET) using neurophysiology-aware encoders and entropy-regularized
+                multimodal fusion. Discrete commit events are generated via dwell/hysteresis filtering and coupled with a
+                HOLD&ndash;ASSIST&ndash;COMMIT (HAC) supervisor that gates execution on perception and robot-state feasibility. Under leave-one-subject-out
+                (LOSO) cross-validation (<span style="white-space: nowrap;">N=32</span>, five International Classification of Functioning, Disability and Health
+                (ICF)-aligned activities of daily living (ADL) tasks), NeuroCommitSSM achieves 0.950 action balanced accuracy and 0.75 false commits per
+                1000&nbsp;s of rest, with graceful degradation under sensor dropout. Hardware-in-the-loop (HIL) validation on a Kinova Gen3 arm confirms safe
+                execution under real-world constraints.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ====================== METHOD: MODEL ARCHITECTURE ====================== -->
+<section class="section anchor is-alt" id="method">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-cubes"></i>
+      <h2 class="title is-3 mb-0">Method</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+            <h3 class="title is-5">Commit Readiness from EEG–EMG–ET (Model Architecture)</h3>
+
+            <p class="muted">
+              NeuroCommitSSM operates on synchronized tri-modal windows of length 2.0&nbsp;s
+              (<span style="white-space: nowrap;">T=500</span> samples at 250&nbsp;Hz; stride 0.25&nbsp;s) and propagates per-sample validity masks
+              throughout tokenization, encoding, fusion, and pooling. For each window, the model jointly predicts
+              (i) <strong>REST</strong> vs. <strong>ACTION</strong>, (ii) task class (<strong>T1–T5</strong>) for ACTION windows, and
+              (iii) a continuous <em>commit-readiness</em> score <em>c</em><sub>t</sub>∈[0,1] that is converted to stable commit events by
+              dwell/hysteresis filtering and consumed by the HOLD–ASSIST–COMMIT supervisor.
+            </p>
+
+            <div class="content small">
+              <ul>
+                <li><strong>Masked patch tokenization:</strong> masked patch projection (p=25 → L=20) into D=160 embeddings; patch validity suppresses unreliable tokens.</li>
+                <li><strong>Encoders:</strong> EEG multiscale filterbank + virtual-channel mixing (K=6); EMG envelope/burst pathways + synergy basis (M=4); ET validity-aware salience with top-k event tokens.</li>
+                <li><strong>Reliability-aware fusion:</strong> quality proxies → uncertainty weights; entropy regularization discourages single-modality dominance.</li>
+                <li><strong>Auxiliary features:</strong> compact descriptors (EEG PSD + EMG time-domain + modality flags; 123-D) injected for dropout robustness.</li>
+                <li><strong>Heads:</strong> action (REST/ACTION), task (T1–T5), and commit head predicting continuous readiness used by dwell/hysteresis filtering.</li>
+              </ul>
+            </div>
+
+            <figure class="figure-frame">
+              <img class="rounded"
+                   src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Figures/TNeuroCommitSSM.png"
+                   alt="NeuroCommitSSM architecture figure"
+                   style="width:100%; height:auto;">
+            </figure>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== PIPELINE ====================== -->
+<section class="section anchor" id="pipeline">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-route"></i>
+      <h2 class="title is-3 mb-0">Pipeline</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+            <h3 class="title is-5">Pipeline and HAC Shared Autonomy (Data Collection → Evaluation)</h3>
+
+            <p class="muted">
+              The system implements an end-to-end <em>intent-to-commit</em> workflow that converts synchronized EEG–EMG–ET into window-level predictions and
+              <em>commit-to-execute</em> decisions. Commit readiness is stabilized via dwell/hysteresis filtering and integrated into a ROS2 supervisor
+              (HOLD–ASSIST–COMMIT) that gates execution on perception and robot-state feasibility for safe, repeatable behavior under cross-subject shift and sensor dropout.
+            </p>
+
+            <div class="content small">
+              <ul>
+                <li><strong>Data acquisition:</strong> synchronized EEG (8ch @ 250 Hz), EMG (4ch), and eye tracking via iMotions/LSL during five ICF-aligned ADL tasks plus REST.</li>
+                <li><strong>Preprocessing &amp; windowing:</strong> deterministic filtering/repair per modality; ET validity handling; 2.0 s windows with 0.25 s stride; train-only normalization.</li>
+                <li><strong>Commit formation:</strong> readiness <em>c</em><sub>t</sub> → discrete commits using dwell + hysteresis (separate ON/OFF thresholds; optional cooldown) to suppress transient spikes.</li>
+                <li><strong>Feasibility gating:</strong> perception feasibility <em>f</em><sub>cv</sub>(t) + robot feasibility <em>f</em><sub>robot</sub>(t) (IK, collisions, joint limits). Safety aborts return to HOLD.</li>
+                <li><strong>Evaluation:</strong> LOSO + sensor-dropout scenarios (S0–S6) with decision-quality metrics (FP/1k REST, flaps/min, coverage) and Kinova Gen3 HIL supervisor ablations.</li>
+              </ul>
+            </div>
+
+            <figure class="figure-frame">
+              <img class="rounded"
+                   src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Figures/tri-modalsafety-awarepipeline.png"
+                   alt="Tri-modal pipeline figure"
+                   style="width:100%; height:auto;">
+            </figure>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== VIDEO ====================== -->
+<section class="section anchor is-alt" id="video">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-video"></i>
+      <h2 class="title is-3 mb-0">Video</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+
+            <p class="muted">
+              This page includes (i) the <strong>data-collection protocol</strong> clips for each task (T1–T5) and
+              (ii) a Kinova Gen3 <strong>HAC shared-autonomy</strong> demonstration video. If a video does not load due to hosting/browser limitations,
+              use the “Open” button beneath the clip to view it on GitHub.
+            </p>
+
+            <div class="buttons mt-4">
+              <a class="button is-rounded btn-accent"
+                 href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main/Data%20Collection%20Video"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-solid fa-clapperboard"></i></span>
+                <span>Data Collection Videos (Folder)</span>
+              </a>
+
+              <a class="button is-rounded"
+                 href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main/Project%20Video"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-solid fa-robot"></i></span>
+                <span>Project Video (Folder)</span>
+              </a>
+
+              <a class="button is-rounded"
+                 href="https://youtu.be/SN-F9XIe3hM"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-brands fa-youtube"></i></span>
+                <span>Paper Video (YouTube)</span>
+              </a>
+            </div>
+
+            <hr class="my-5">
+
+            <!-- HAC Video -->
+            <h3 class="title is-5">Kinova Gen3 Demonstration (HAC Shared Autonomy)</h3>
+            <div class="columns is-multiline is-variable is-4 mt-2">
+              <div class="column is-12">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title is-6">Project Demo — HAC on Kinova Gen3</p>
+                    <p class="content is-size-7 muted">
+                      End-to-end execution under feasibility-grounded HOLD–ASSIST–COMMIT supervision with commit-to-execute decision gating.
+                    </p>
+
+                    <div class="video-wrap">
+                      <video controls playsinline preload="metadata">
+                        <source src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Project%20Video/project.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+
+                    <div class="mt-3">
+                      <a class="button is-small is-rounded"
+                         href="https://github.com/madibabaiasl/NeuroCommitSSM/blob/main/Project%20Video/project.mp4"
+                         target="_blank" rel="noopener">
+                        <span class="icon"><i class="fa-brands fa-github"></i></span>
+                        <span>Open</span>
+                      </a>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-5">
+
+            <!-- Data collection videos -->
+            <h3 class="title is-5">Task Videos (Data Collection Protocol)</h3>
+            <p class="muted">
+              The following clips illustrate the <strong>data-collection protocol</strong> for each task (T1–T5), including participant interaction with the setup
+              and the trial workflow.
+            </p>
+
+            <div class="columns is-multiline is-variable is-4 mt-2">
+
+              <!-- T1 -->
+              <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title is-6">T1 — Clock</p>
+                    <p class="content is-size-7 muted">Reaching toward a tabletop clock and grasping it.</p>
+
+                    <div class="video-wrap">
+                      <video controls playsinline preload="metadata">
+                        <source src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Data%20Collection%20Video/T1.mp4" type="video/mp4">
+                      </video>
+                    </div>
+
+                    <div class="mt-3">
+                      <a class="button is-small is-rounded"
+                         href="https://github.com/madibabaiasl/NeuroCommitSSM/blob/main/Data%20Collection%20Video/T1.mp4"
+                         target="_blank" rel="noopener">
+                        <span class="icon"><i class="fa-brands fa-github"></i></span>
+                        <span>Open</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- T2 -->
+              <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title is-6">T2 — Bottle</p>
+                    <p class="content is-size-7 muted">Picking up a dropped apple juice bottle and placing it back onto the table.</p>
+
+                    <div class="video-wrap">
+                      <video controls playsinline preload="metadata">
+                        <source src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Data%20Collection%20Video/T2.mp4" type="video/mp4">
+                      </video>
+                    </div>
+
+                    <div class="mt-3">
+                      <a class="button is-small is-rounded"
+                         href="https://github.com/madibabaiasl/NeuroCommitSSM/blob/main/Data%20Collection%20Video/T2.mp4"
+                         target="_blank" rel="noopener">
+                        <span class="icon"><i class="fa-brands fa-github"></i></span>
+                        <span>Open</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- T3 -->
+              <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title is-6">T3 — Fan</p>
+                    <p class="content is-size-7 muted">Pressing the fan power button to toggle it on and off.</p>
+
+                    <div class="video-wrap">
+                      <video controls playsinline preload="metadata">
+                        <source src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Data%20Collection%20Video/T3.mp4" type="video/mp4">
+                      </video>
+                    </div>
+
+                    <div class="mt-3">
+                      <a class="button is-small is-rounded"
+                         href="https://github.com/madibabaiasl/NeuroCommitSSM/blob/main/Data%20Collection%20Video/T3.mp4"
+                         target="_blank" rel="noopener">
+                        <span class="icon"><i class="fa-brands fa-github"></i></span>
+                        <span>Open</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- T4 -->
+              <div class="column is-12-mobile is-6-tablet is-6-desktop">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title is-6">T4 — Plant</p>
+                    <p class="content is-size-7 muted">Adjusting or repositioning a plant on the shelf.</p>
+
+                    <div class="video-wrap">
+                      <video controls playsinline preload="metadata">
+                        <source src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Data%20Collection%20Video/T4.mp4" type="video/mp4">
+                      </video>
+                    </div>
+
+                    <div class="mt-3">
+                      <a class="button is-small is-rounded"
+                         href="https://github.com/madibabaiasl/NeuroCommitSSM/blob/main/Data%20Collection%20Video/T4.mp4"
+                         target="_blank" rel="noopener">
+                        <span class="icon"><i class="fa-brands fa-github"></i></span>
+                        <span>Open</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- T5 -->
+              <div class="column is-12-mobile is-6-tablet is-6-desktop">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title is-6">T5 — Wave</p>
+                    <p class="content is-size-7 muted">Performing a greeting gesture by waving the hand.</p>
+
+                    <div class="video-wrap">
+                      <video controls playsinline preload="metadata">
+                        <source src="https://raw.githubusercontent.com/madibabaiasl/NeuroCommitSSM/main/Data%20Collection%20Video/T5.mp4" type="video/mp4">
+                      </video>
+                    </div>
+
+                    <div class="mt-3">
+                      <a class="button is-small is-rounded"
+                         href="https://github.com/madibabaiasl/NeuroCommitSSM/blob/main/Data%20Collection%20Video/T5.mp4"
+                         target="_blank" rel="noopener">
+                        <span class="icon"><i class="fa-brands fa-github"></i></span>
+                        <span>Open</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /columns -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== RESULTS ====================== -->
+<section class="section anchor" id="results">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-chart-line"></i>
+      <h2 class="title is-3 mb-0">Results</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+            <p class="muted">
+              The paper reports results for (i) action and task recognition under LOSO cross-validation, (ii) commit decision quality under sensor-dropout scenarios (S0–S6),
+              and (iii) system-level performance with Kinova Gen3 HIL supervisor ablations. Metrics include action/task balanced accuracy and AUPRC, plus decision-quality
+              metrics (FP/1k REST, flaps/min, and success-to-commit coverage), with paired statistical tests and ablations.
+            </p>
+
+            <div class="buttons mt-4">
+              <a class="button is-rounded btn-accent"
+                 href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-solid fa-file-pdf"></i></span>
+                <span>View Paper (Repo)</span>
+              </a>
+
+              <a class="button is-rounded"
+                 href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-brands fa-github"></i></span>
+                <span>Reproducibility (Code)</span>
+              </a>
+
+              <a class="button is-rounded"
+                 href="#video">
+                <span class="icon"><i class="fa-solid fa-video"></i></span>
+                <span>Videos</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ====================== DATASET ====================== -->
+<section class="section anchor is-alt" id="dataset">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-database"></i>
+      <h2 class="title is-3 mb-0">Dataset</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+
+            <p class="muted">
+              We release a synchronized tri-modal dataset consisting of EEG (Enobio-8, 8 channels @ 250&nbsp;Hz), EMG (PLUX, 4 channels),
+              and eye tracking (Pupil Labs Neon) recorded via iMotions/LSL during five ICF-aligned ADL tasks plus REST. Evaluation follows
+              subject-independent leave-one-subject-out (LOSO) splits and sensor-dropout scenarios (S0–S6).
+            </p>
+
+            <div class="content small">
+              <ul>
+                <li><strong>T1 (Clock):</strong> reaching toward a tabletop clock and grasping it.</li>
+                <li><strong>T2 (Bottle):</strong> picking up a dropped apple juice bottle and placing it back onto the table.</li>
+                <li><strong>T3 (Fan):</strong> pressing the fan power button to toggle it on and off.</li>
+                <li><strong>T4 (Plant):</strong> adjusting or repositioning a plant on the shelf.</li>
+                <li><strong>T5 (Wave):</strong> performing a greeting gesture by waving the hand.</li>
+              </ul>
+            </div>
+
+            <div class="buttons mt-4">
+              <a class="button is-rounded btn-accent"
+                 href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-brands fa-github"></i></span>
+                <span>Dataset &amp; Code</span>
+              </a>
+
+              <a class="button is-rounded"
+                 href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main/Data%20Collection%20Video"
+                 target="_blank" rel="noopener">
+                <span class="icon"><i class="fa-solid fa-video"></i></span>
+                <span>Data Collection Videos</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== BIBTEX ====================== -->
+<section class="section anchor" id="bibtex">
+  <div class="container is-max-fullhd">
+    <div class="section-title">
+      <i class="fa-solid fa-quote-right"></i>
+      <h2 class="title is-3 mb-0">BibTeX</h2>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <div class="card">
+          <div class="card-content">
+
+            <p class="muted">If you use this work, please cite:</p>
+
+            <div class="buttons mb-3">
+              <button class="button is-rounded btn-accent" id="copyBib">
+                <span class="icon"><i class="fa-solid fa-copy"></i></span>
+                <span>Copy BibTeX</span>
+              </button>
+            </div>
+
+            <pre><code id="bibtexCode">@inproceedings{sultan2026neurocommitssm,
+  title     = {NeuroCommitSSM: Decision-Centric Shared Autonomy for Safe Assistive Manipulation via EEG--EMG--ET Commit Readiness},
+  author    = {Sultan, Tipu and Sangani, Param and Cool, Kody and Sikorski, Pascal and Liu, Guangping and Akbarpour, Hadi and Babaiasl, Madi},
+  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2026},
+  note      = {Under review}
+}</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="footer">
+  <div class="container is-max-fullhd">
+    <div class="content has-text-centered">
+      <p class="muted small">
+        NeuroCommitSSM ·
+        <a href="https://github.com/madibabaiasl/NeuroCommitSSM/tree/main" target="_blank" rel="noopener">GitHub</a>
+        ·
+        <a href="#top">Back to top</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top floating button -->
+<a class="to-top" id="toTop" href="#top" aria-label="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</a>
+
+<script>
+  // Bulma navbar burger
+  document.addEventListener('DOMContentLoaded', () => {
+    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    burgers.forEach(el => {
+      el.addEventListener('click', () => {
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+      });
+    });
+  });
+
+  // Copy BibTeX
+  const copyBtn = document.getElementById('copyBib');
+  const bib = document.getElementById('bibtexCode');
+  if (copyBtn && bib) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(bib.innerText);
+        copyBtn.classList.add('is-success');
+        copyBtn.innerHTML = '<span class="icon"><i class="fa-solid fa-check"></i></span><span>Copied</span>';
+        setTimeout(() => {
+          copyBtn.classList.remove('is-success');
+          copyBtn.innerHTML = '<span class="icon"><i class="fa-solid fa-copy"></i></span><span>Copy BibTeX</span>';
+        }, 1600);
+      } catch (e) {
+        alert('Copy failed. Please manually select and copy the BibTeX block.');
+      }
+    });
+  }
+
+  // Back-to-top visibility
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', () => {
+    toTop.style.display = (window.scrollY > 600) ? 'inline-flex' : 'none';
+  });
+</script>
+
+</body>
+</html>
