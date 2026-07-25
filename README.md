@@ -2,6 +2,8 @@
 
 This repository contains the end-to-end notebook pipeline for our IROS paper, including data preprocessing (Phase 1B → Phase 5.5) and the model notebook for training/evaluation.
 
+Companion Website: https://madibabaiasl.github.io/NeuroCommitSSM/
+
 ---
 
 
