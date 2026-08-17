@@ -4,6 +4,8 @@ This repository contains the end-to-end notebook pipeline for our IROS paper, in
 
 Companion Website: https://madibabaiasl.github.io/NeuroCommitSSM/
 
+Paper: https://arxiv.org/pdf/2607.15395
+
 ---
 
 
@@ -102,12 +104,11 @@ Common dependencies:
 ## Citation
 
  
-**We will replace the placeholders after acceptance.**
 
 ```bibtex
 @inproceedings{NeuroCommitSSM_IROS_2026,
-  title     = {NeuroCommitSSM: TODO (paper title after acceptance)},
-  author    = {TODO: Author list},
+  title     = {NeuroCommitSSM: Decision-Centric Shared Autonomy for Safe Assistive Manipulation via EEG–EMG–ET Commit Readiness},
+  author    = {Tipu Sultan, Param Sangani, Kody Cool, Pascal Sikorski, Guangping Liu, Hadi Akbarpour, Madi Babaiasl},
   booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
   year      = {2026}
 }
